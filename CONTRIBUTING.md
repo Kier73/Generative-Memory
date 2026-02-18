@@ -1,6 +1,6 @@
 # Contributing to Generative Memory
 
-Thank you for your interest in contributing to Generative Memory! We welcome contributions from the community to help improve this project.
+Generating things that generate
 
 ## Getting Started
 
@@ -52,6 +52,4 @@ ctest
 4.  Submit a Pull Request to the `main` branch.
 5.  Provide a clear description of your changes.
 
-## Code of Conduct
 
-Please be respectful and considerate of others when contributing to this project.
