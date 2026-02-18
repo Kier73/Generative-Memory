@@ -1,6 +1,6 @@
 # Generative Memory
 
-An Experimental C library for customizable **Procedural Memory Spaces*. 
+An Experimental C library for customizable **Procedural Memory Spaces**. 
 
 Generative Memory projects a virtual 1-Petabyte data space using deterministic mathematical functions, requiring nearly zero disk space while providing bit-exact uniformity.
 
