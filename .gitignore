@@ -1,0 +1,48 @@
+# Build artifacts
+build/
+build_test/
+build_release/
+build_demo/
+release/
+bin/
+*.zip
+lib/
+*.exe
+*.o
+*.a
+*.so
+*.dylib
+*.dll
+*.gvm_delta
+
+# IDEs and OS
+.vs/
+.vscode/
+.idea/
+bin/
+obj/
+out/
+.DS_Store
+Thumbs.db
+ehthumbs.db
+[Dd]esktop.ini
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+venv/
+.venv/
+env/
+
+# Test outputs
+tests/__pycache__/
+*.log
+*.tmp
+src/exascale_gauntlet.c
+src/material_gauntlet.c
+src/morph_gauntlet.c
+src/mesh_multi_gauntlet.c
+src/system_integration_audit.c
+src/minimal_test.c
+src/minimal_net_test.c

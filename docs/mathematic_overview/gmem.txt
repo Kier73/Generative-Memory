@@ -1,0 +1,80 @@
+# Mathematical Overview: gmem.c
+
+## 1. Introduction
+This document provides a mathematical specification for the core logic of the Generative Memory (GVM) system found in `src/gmem.c`. The system maps a virtual address space $\mathbb{V} = \{0, 1, \dots, 2^{64}-1\}$ to a value space $\mathbb{R}$ via a deterministic procedural generation function $G(v, S)$ and a sparse physical overlay $O$.
+
+---
+
+## 2. Core Procedural Synthesis
+
+### 2.1. Deterministic Shuffle (Feistel Network)
+The system uses a 4-round Feistel network to generate a pseudo-random permutation from a linear address. This provides high-quality diffusion.
+
+Let $v \in \mathbb{V}$ be the 64-bit virtual address.
+Let $S \in \mathbb{Z}$ be the 64-bit master seed.
+
+We decompose $v$ into two 32-bit halves: $L_0, R_0$.
+For rounds $i = 1$ to $4$:
+$$ L_i = R_{i-1} $$
+$$ R_i = L_{i-1} \oplus (R_{i-1} \times K + S) $$
+
+Where:
+- $\oplus$ denotes bitwise XOR.
+- $K = 0x9E3779B9$ (Golden Ratio prime constant).
+- Multiplication is modulo $2^{32}$.
+
+The final shuffled value is $H(v) = (L_4 \ll 32) | R_4$.
+
+### 2.2. Monotonic Synthesis Function
+For `gmem_fetch_monotonic_f32`, the system generates a varied but strictly monotonic value.
+
+Let $N = 2^{64}-1$.
+The base ramp function $B(v)$ is:
+$$ B(v) = \frac{v}{N} $$
+
+The variety term $V(v)$ is specific to the seed $S$:
+$$ V(v) = \frac{H(v)}{N^2} $$
+Note: The division by $N^2$ ensures the variety term is extremely small ($\approx 10^{-19}$), preserving the monotonicity of $B(v)$ while encoding unique data.
+
+$$ \text{Result}(v) = B(v) + V(v) $$
+
+---
+
+## 3. Overlay and Sparse Storage
+
+### 3.1. Hash Mapping
+The Sparse Overlay $O$ is implemented as a hash map.
+The hashing function $h(v)$ uses the FNV-1a algorithm parameters:
+$$ h(v) = (v \oplus O_{offset}) \times P_{prime} \pmod{2^{64}} $$
+Where:
+- $O_{offset} = 14695981039346656037$
+- $P_{prime} = 1099511628211$
+
+### 3.2. Retrieval Logic
+The fetch operation $F(v)$ combines the overlay and the generator:
+
+$$
+F(v) = 
+\begin{cases} 
+O[v] & \text{if } v \in O \\
+M(G(v)) & \text{if } \text{Morphing Active} \\
+G(v) & \text{otherwise}
+\end{cases}
+$$
+
+---
+
+## 4. Integrity Check (Audit)
+
+### 4.1. Observations
+-   **Line 16**: The hash constant `14695981039346656037ULL` matches the standard FNV-1a 64-bit offset basis.
+-   **Line 143**: The `gmem_shuffle_u64` function correctly implements a balanced Feistel network.
+-   **Line 256**: The division by `18446744073709551615.0` (UINT64_MAX) converts the 64-bit integer to a normalized double in $[0, 1]$.
+-   **Line 356**: The CRC32 implementation uses the standard polynomial `0xEDB88320`.
+
+### 4.2. Anomalies
+-   **Line 103**: `FATAL: Insert loop full!`. The open addressing collision resolution has a hard failure mode if the table is full, calling `exit(1)`. This is mathematically valid for a finite map but operationally risky.
+-   **Line 618**: The SIMD implementation manually unrolls the Feistel rounds. This assumes the compiler will allocate registers efficiently.
+
+# Summary
+The implementation strictly follows the mathematical definition of a Feistel cipher for pseudo-random number generation. The conversion to floating point maintains precision within standard `float` limits.

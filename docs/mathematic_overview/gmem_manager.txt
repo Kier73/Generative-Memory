@@ -1,0 +1,34 @@
+# Mathematical Overview: gmem_manager.c
+
+## 1. Introduction
+This document analyzes the Tenant Manager in `src/gmem_manager.c`. It acts as a catalog for active GVM contexts.
+
+---
+
+## 2. Tenant Model
+
+The Manager $M$ maintains a set of Tenants $T = \{t_1, t_2, \dots\}$.
+Each tenant is a tuple $(S, C, P)$:
+-   $S$: Seed (Unique Identifier)
+-   $C$: Context (Active Instance)
+-   $P$: Path (Virtual Mount Point)
+
+### 2.1. Quota Management
+The manager enforces resource limits (Overlay Limit) when creating contexts via `gmem_manager_get_by_seed_with_quota`.
+
+$$ \text{Limit}(C) = Q_{entries} $$
+
+### 2.2. Lookup Complexity
+-   The lookup `gmem_manager_get_by_seed` performs a linear scan $O(N)$ over the tenant list.
+-   Given `capacity` usually starts at 16, this is acceptable for small numbers of tenants. For large-scale multi-tenancy, a hash map would be required.
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Thread Safety
+-   The file correctly uses `MGR_LOCK` (Critical Section) around the tenant list modifications and lookups.
+-   **Lock Granularity**: The lock covers the entire traversal. This is safe but limits read concurrency.
+
+# Summary
+The Manager provides the lifecycle management and registry for the generative contexts.

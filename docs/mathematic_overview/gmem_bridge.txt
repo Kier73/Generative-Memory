@@ -1,0 +1,47 @@
+# Mathematical Overview: gmem_bridge.c
+
+## 1. Introduction
+This document defines the Bridge subsystem (`src/gmem_bridge.c`), which acts as the interface between the linear system address space and the synthetic manifold.
+
+---
+
+## 2. Projective Mapping ($\Phi$)
+
+The Bridge defines a mapping function $\Phi: \mathbb{L} \times \mathbb{Z} \to \mathbb{M}$ where $\mathbb{L}$ is the linear system address space (RAM) and $\mathbb{M}$ is the synthetic manifold address space.
+
+### 2.1. Page-Aligned Projection
+Let $L$ be a linear address.
+Let $P_{size} = 4096$ (Page Size).
+
+We decompose $L$ into a page index $p$ and offset $o$:
+$$ p = \lfloor L / P_{size} \rfloor $$
+$$ o = L \pmod{P_{size}} $$
+
+The manifold base address $M_{base}$ is derived via a hash mixing function $H_{mix}$:
+$$ M_{base} = H_{mix}(p \oplus S) \land \neg(P_{size}-1) $$
+
+The final synthetic address is:
+$$ \Phi(L, S) = M_{base} | o $$
+
+This ensures that contiguous bytes within a physical page map to contiguous bytes in the synthetic manifold, preserving locality, while adjacent physical pages map to widely dispersed synthetic regions.
+
+---
+
+## 3. Coherence Operator ($\Psi$)
+
+The coherence operator $\Psi$ handles the retrieval of data, delegating to the core Generative Memory Context (GMC).
+
+$$ \Psi(L) = \text{GMC}.\text{fetch}(\Phi(L, S_{bridge})) $$
+
+---
+
+## 4. Integrity Check (Audit)
+
+### 4.1. Hash Constants
+-   **Line 19**: `0xBF58476D1CE4E5B9ULL`. This is a mixing constant derived from the MurmurHash3 finalizer. It is a known high-quality avalanching multiplier.
+
+### 4.2. Alignment
+-   **Line 23**: `(manifold_base & ~(uint64_t)(PAGE_SIZE - 1))`. This correctly clears the lower 12 bits (for 4KB pages) to ensure page alignment before adding the offset.
+
+# Summary
+The Bridge implements a non-linear page table logic, deterministically scattering linear requests into the synthetic space.

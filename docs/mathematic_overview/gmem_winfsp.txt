@@ -1,0 +1,39 @@
+# Mathematical Overview: gmem_winfsp.c
+
+## 1. Introduction
+This document describes the FUSE/WinFSP Bridge in `src/gmem_winfsp.c`. It projects the Archetype structure into the Operating System's VFS.
+
+---
+
+## 2. VFS Resolution
+
+The filesystem root is mapped to the Manager.
+Root `/` contains directories corresponding to Tenants.
+
+### 2.1. Path Parsing
+Path $P$ is split into $(T_{name}, A_{path})$.
+-   $T_{name}$ resolves the Tenant (Seed).
+-   $A_{path}$ is passed to the Archetype system (`gmem_archetype.c`) to generate directory entries.
+
+### 2.2. File I/O
+Read operations `gmem_read(path, offset, size)`:
+1.  Resolve Tenant $C$.
+2.  Resolve Virtual File Entry $E$ from $A_{path}$.
+3.  Calculate Manifold Address:
+    $$ v_{start} = (E.\text{offset} + \text{offset}) / \text{sizeof(float)} $$
+4.  Execute Bulk Fetch:
+    $$ \text{Buffer} \gets \text{Fetch}(C, v_{start}, \text{size}) $$
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Read-Only Constraint
+-   `gmem_write` returns `-EROFS` (Read-Only File System).
+-   This confirms the current implementation is strictly for *viewing* the generative data as files, not modifying them via standard OS write calls (modifications must go through the GVM API or specific tools).
+
+### 3.2. Error Handling
+-   The code correctly returns `-ENOENT` if the archetype resolution fails.
+
+# Summary
+The WinFSP bridge wraps the mathematical projections of the Archetype system into standard POSIX/Win32 file operations.

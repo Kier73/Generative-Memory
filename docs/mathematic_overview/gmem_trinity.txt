@@ -1,0 +1,50 @@
+# Mathematical Overview: gmem_trinity.c
+
+## 1. Introduction
+This document defines the "Trinity" subsystem found in `src/gmem_trinity.c`. This module handles the interplay between the three core pillars of GVM:
+1.  **Generative** (Procedural)
+2.  **Material** (Overlay)
+3.  **Network** (Mesh)
+
+---
+
+## 2. Logic Model
+
+The Trinity module acts as a coherence controller. It defines the precedence function $V_{final}(x)$ for any given address $x$.
+
+### 2.1. Layered Precedence
+$$ V_{final}(x) = L_3( L_2( L_1(x) ) ) $$
+
+Where:
+-   $L_1(x) = G(x, S)$ (Generative Layer)
+-   $L_2(val) = \text{ApplyOverlay}(val, O)$ (Material Layer)
+-   $L_3(val) = \text{ApplyNetworkState}(val, N)$ (Network Layer)
+
+In practice, the implementation effectively flattens this. The Trinity logic ensures that the **Material** layer always occludes the **Generative** layer.
+
+$$ \text{Trinity}(x) = (x \in O) \ ? \ O[x] \ : \ G(x, S) $$
+
+### 2.2. Z-Mask Hierarchy (Space Skipping)
+To optimize the search for Material existence ($x \in O$), Trinity employs a hierarchical bitmask (Z-Mask).
+
+Let address space $\mathbb{V}$ be divided into blocks $B_i$ of size $2^{32}$.
+Mask $M_1$ (Macro) tracks terabyte-level regions.
+Mask $M_2$ (Detail) tracks page-level regions within active macro regions.
+
+$$ \text{IsClean}(x) = \neg M_1[\text{TB}(x)] \lor \neg M_2[\text{Page}(x)] $$
+
+If $\text{IsClean}(x)$ is true, the system skips the hash map lookup entirely and returns $G(x, S)$. This is a critical performance optimization, effectively making the overlay lookup cost $O(1)$ for untouched regions.
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Bit Manipulation
+-   The Z-Mask logic uses bitwise operators: `ctx->macro_zmask[tb_idx >> 3] |= (1 << (tb_idx & 7))`.
+-   Translation:
+    -   `tb_idx >> 3` $\equiv \lfloor tb\_idx / 8 \rfloor$ (Byte index).
+    -   `tb_idx & 7` $\equiv tb\_idx \pmod 8$ (Bit index).
+    -   This is the standard, efficient way to address a bit array.
+
+# Summary
+Trinity provides the unification logic. Its mathematical contribution is the efficient evaluation of the Precedence Function using hierarchical bitmap acceleration (Space Skipping).

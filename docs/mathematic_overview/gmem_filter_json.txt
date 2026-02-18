@@ -1,0 +1,34 @@
+# Mathematical Overview: gmem_filter_json.c
+
+## 1. Introduction
+This document details the JSON Filter in `src/gmem_filter_json.c`, which maps string paths to the synthetic address space.
+
+---
+
+## 2. Topological Projection
+
+A Filter $F$ defines a mapping from a path string $P$ to an address $v \in \mathbb{V}$.
+
+### 2.1. Salt Generation
+The filter is initialized with a schema name.
+$$ S_{salt} = \text{Reduce}(\text{Schema}, 0\text{xDEADC0DE}) $$
+The reduction uses a simple polynomial rolling hash with multiplier 31.
+
+### 2.2. Path Resolution
+The resolution function $R(P)$ uses the FNV-1a hash algorithm, seeded with $S_{salt}$.
+
+$$ H_0 = 14695981039346656037 \oplus S_{salt} $$
+$$ H_{i} = (H_{i-1} \oplus P[i]) \times 1099511628211 $$
+
+The final address $v = H_{|P|}$.
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Collision Probability
+-   The use of FNV-1a 64-bit provides a very low collision probability for textual keys ($1/2^{64}$).
+-   This effectively implements a "Content Addressable Memory" where the path string determines the physical location of the data.
+
+# Summary
+The JSON filter implements a string-to-int64 hashing projection, allowing hierarchical text paths to address the flat binary manifold.

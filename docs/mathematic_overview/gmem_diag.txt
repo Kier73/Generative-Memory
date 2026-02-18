@@ -1,0 +1,27 @@
+# Mathematical Overview: gmem_diag.c
+
+## 1. Introduction
+This document analyzes the diagnostic entry point `src/gmem_diag.c`.
+
+---
+
+## 2. Test Vectors
+
+The file performs a specific set of operations for verification:
+
+1.  **Context Creation**: Seed `0xDEADBEEF`.
+2.  **Inductive Resolve**: `g_inductive_resolve_sorted`.
+    -   *Note*: This function symbol is used here but defined in `gmem_trinity.h`. It tests the sorting/searching logic.
+3.  **Z-Mask Write**: Address `1,000,000`.
+    -   Verifies the hierarchical dirty bit logic.
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. API Usage
+-   Correctly pairs `gmem_create` with `gmem_destroy`.
+-   Acts as a minimal integration test.
+
+# Summary
+A simple driver program for sanity checking the core library functions.

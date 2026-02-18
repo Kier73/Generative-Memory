@@ -1,0 +1,40 @@
+# Mathematical Overview: gmem_archetype.c
+
+## 1. Introduction
+This document details the Archetype system in `src/gmem_archetype.c`. Archetypes define the "Shape" or "Semantic Structure" of the generated data, mapping the raw float array into structured virtual files.
+
+---
+
+## 2. Structure Mapping
+
+### 2.1. Virtual File System (VFS) Projection
+An archetype $A$ defines a mapping function $F_A: \mathbb{V} \mapsto \mathcal{F}$, where $\mathcal{F}$ is a set of virtual file descriptors.
+
+For the `GMEM_ARCHETYPE_FAT` (File Allocation Table) emulation:
+The function defines a series of directory entries $(E_0, E_1, \dots)$ generated procedurally.
+
+$$ E_i.\text{name} = \text{GenName}(i, S) $$
+$$ E_i.\text{size} = \text{GenSize}(i, S) $$
+$$ E_i.\text{type} = \text{GenType}(i, S) $$
+
+### 2.2. Procedural Content Generation (PCG)
+The listing function is effectively:
+$$ \text{ListDir}(\text{root}) = \{ \text{Project}(i) \mid i \in [0, 1024] \} $$
+
+Instead of reading a disk structure, the system computes the directory listing on-the-fly using the seed $S$.
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Determinism
+-   The archetype system relies on the same strict determinism as the memory core.
+-   Accessing the "same" virtual file (e.g., "file_42.dat") twice must yield the exact same file size and properties.
+-   **Check**: The code uses the seed $S$ combined with the directory index to generate properties. This ensures temporal consistency.
+
+### 3.2. Constraints
+-   The current implementation seems to limit directory listings to a fixed number (e.g., 1024 entries).
+-   Mathematically, this limits the cardinality of the virtual set $|\mathcal{F}| \le 1024$, preventing infinite recursion.
+
+# Summary
+Archetypes act as a Lens Function, transforming the raw 1D array of floats into a structured n-dimensional hierarchy (Files and Folders) without storing metadata.

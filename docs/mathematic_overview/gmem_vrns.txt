@@ -1,0 +1,42 @@
+# Mathematical Overview: gmem_vrns.c
+
+## 1. Introduction
+This document details the Variety Reverse Number System (VRNS) implemented in `src/gmem_vrns.c`. VRNS project a high-entropy address space onto a set of small coprime moduli to generate values with specific distribution properties.
+
+---
+
+## 2. Mathematical Definition
+
+### 2.1. Residue Number System (RNS) Projection
+Let $\mathcal{M} = \{m_1, m_2, \dots, m_k\}$ be a set of pairwise coprime integers.
+The set used in the code is:
+$$ \mathcal{M} = \{251, 257, 263, 269, 271, 277, 281, 283\} $$
+All $m_i$ are prime numbers.
+
+The projection function $P: \mathbb{V} \times \mathbb{Z} \to \mathbb{Z}^k$ maps a virtual address $v$ and seed $S$ to a vector of residues $r$:
+Let $x = v \oplus S$.
+$$ r_i = x \pmod{m_i} \quad \text{for } i \in \{1, \dots, 8\} $$
+
+### 2.2. Torus Projection (Reconstruction)
+To convert the residue vector $r$ back to a scalar value $y \in [0, 1)$, the system uses a fractional summation method akin to a Torus primitive.
+
+$$ y = \left( \sum_{i=1}^{k} \frac{r_i}{m_i} \right) \pmod 1 $$
+
+This effectively mixes the phases of the periodic functions defined by each modulus.
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Code Verification
+-   **Line 3**: `MODULI` array contains 8 primes.
+    -   $\text{LCM}(\mathcal{M}) \approx 1.5 \times 10^{19} \approx 2^{63.7}$, slightly less than $2^{64}$. This ensures the period of the generator is effectively maximizing the 64-bit space without repetition.
+-   **Line 9**: `x % MODULI[i]` correctly computes the residue.
+-   **Line 19**: `(double)rns.residues[i] / (double)MODULI[i]` computes the normalized residue $ \in [0, 1) $.
+-   **Line 22**: `(accumulator - (long)accumulator)` correctly extracts the fractional part (modulo 1 operation).
+
+### 3.2. Properties
+The function generates a uniform distribution over $[0, 1)$ due to the equidistribution theorem applied to the sum of irrational rotations (approximated here by large prime fractions).
+
+# Summary
+The file implements a straightforward RNS-based noise generator. It is mathematically sound and provides $O(1)$ calculation complexity per element independent of the address size.

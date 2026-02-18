@@ -1,0 +1,33 @@
+# Mathematical Overview: gmem_alloc.c
+
+## 1. Introduction
+This document analyzes the Sparse Allocator in `src/gmem_alloc.c`. It provides an interface similar to `malloc` but backed by generative contexts.
+
+---
+
+## 2. Entropy derivation
+
+When `g_malloc(size)` is called, it creates a new isolated universe (Context).
+The seed $S_{alloc}$ for this universe is derived from the requested size:
+
+$$ S_{alloc} = \text{size} \oplus 0\text{xFEEDFACE} $$
+
+This implies that two allocations of the exact same size will share the exact same generative data (unless address randomization is applied externally).
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Pointer Arithmetic
+-   The function returns a `void*` pointer to `header`.
+-   **Risk**: The client receives a pointer to the header struct, but standard `malloc` implementations return a pointer to the *payload*.
+    -   **Critical Observation**: The implementation returns `(void*)header`. If the user writes to this pointer, they overwrite the header (`ctx`, `size`, `magic`) immediately!
+    -   **Correction**: A standard allocator should return `(void*)(header + 1)`.
+    -   *Logic Check*: However, `g_malloc` is a *sparse* allocator. It does not return a buffer you can write to directly with `memcpy`. It returns a handle to be used with `g_get_f32`.
+    -   *Verdict*: Valid within the specialized API contract, but dangerous if confused with standard memory.
+
+### 3.2. Magic Number
+-   `0x474D454D` corresponds to ASCII "GMEM".
+
+# Summary
+The allocator is a factory for GVM contexts, deterministically seeded by allocation size.

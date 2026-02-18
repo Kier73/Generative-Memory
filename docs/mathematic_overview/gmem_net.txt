@@ -1,0 +1,48 @@
+# Mathematical Overview: gmem_net.c
+
+## 1. Introduction
+This document describes the partial mathematical model of the mesh synchronization protocol in `src/gmem_net.c`. While primarily a network protocol, it defines how state converges across a distributed graph.
+
+---
+
+## 2. Convergence Model
+
+### 2.1. State Definition
+Let $\mathcal{N}$ be a set of nodes $\{n_1, n_2, \dots, n_k\}$.
+Each node maintains a state $\Sigma_i = (S_i, O_i, \theta_i)$, where:
+- $S_i$ is the generative seed.
+- $O_i$ is the sparse overlay (set of delta pairs $(addr, value)$).
+- $\theta_i$ is the Law configuration (Archetype, Morph parameters).
+
+### 2.2. Delta Propagation
+When a node $n_i$ generates a write operation $w(a, v)$:
+1.  **Local Update**: $O_i \gets O_i \cup \{(a, v)\}$
+2.  **Broadcast**: Node $n_i$ emits message $M_{sync}(S_i, a, v)$ to all neighbors.
+3.  **Remote Update**: For each $n_j$ where $S_j = S_i$:
+    $$ O_j \gets O_j \cup \{(a, v)\} $$
+
+This defines an **Eventual Consistency** model using Last-Write-Wins (LWW) based on arrival time (network order), as there are no logical clocks (Vector/Lamport) implemented.
+
+### 2.3. Discovery Probability
+The "Shout" mechanism uses random UDP beacons.
+Let $T$ be the interval between shouts.
+The probability of discovery $P_{disc}(t)$ approaches 1 as $t \to \infty$.
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Synchronization Vulnerability
+Mathematically, $O_j = O_i$ is **not guaranteed** because UDP packets may be dropped ($M_{sync}$ is lossy).
+There is no "State Vector Exchange" or "Merkle Tree Sync" implemented to recover lost packets.
+Therefore, the mathematical convergence is:
+$$ \lim_{t \to \infty} P(O_j = O_i) < 1 $$
+This means the memory states will inherently drift apart over time on lossy networks.
+
+### 3.2. Authentication
+The addition of the token check:
+$$ \text{Valid}(M) \iff M_{token} = K_{local} $$
+This adds a simple equality predicate to the acceptance function.
+
+# Summary
+The network layer implements a probabilistic best-effort synchronization. It lacks the mathematical rigor of a CRDT (Conflict-free Replicated Data Type), meaning state divergence is mathematically certain over long periods of operation.

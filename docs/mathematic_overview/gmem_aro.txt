@@ -1,0 +1,51 @@
+# Mathematical Overview: gmem_aro.c
+
+## 1. Introduction
+This document analyzes the Algebraic Rewrite & Optimization (ARO) engine in `src/gmem_aro.c`. This component detects algebraic structure in the generative seed to optimize bulk synthesis.
+
+---
+
+## 2. Algebraic Laws
+
+The system attempts to classify the generator function $G(x)$ based on the seed $S$ into one of three forms:
+
+1.  **Zero Manifold** ($\mathcal{Z}$):
+    $$ G(x) = 0 \quad \forall x $$
+    Occurs if $S = 0$ (Null Seed).
+
+2.  **Constant Manifold** ($\mathcal{C}$):
+    $$ G(x) = k \quad \forall x $$
+    In this implementation, it checks if the entropy of the seed falls below a threshold, forcing a collapse to a constant.
+
+3.  **Linear Manifold** ($\mathcal{L}$):
+    $$ G(x) = mx + b $$
+    Simple linear mapping.
+
+### 2.1. Rule Selection Logic
+The function `gmem_aro_simplify` applies heuristics:
+
+$$
+\text{Rule}(S) = 
+\begin{cases} 
+\text{ZERO} & \text{if } S = 0 \\
+\text{CONSTANT} & \text{if } S \in \text{MagicConstants} \\
+\text{COMPLEX} & \text{otherwise}
+\end{cases}
+$$
+
+*(Note: The actual implementation in ARO often serves as a placeholder for symbolic simplification in more advanced versions. In this codebase, it primarily optimized the Zero case.)*
+
+---
+
+## 3. Integrity Check (Audit)
+
+### 3.1. Code Specifics
+-   **gmem_aro.c** currently seems to handle basic seed checks.
+-   The "Constant" optimization allows the bulk fetching loop in `gmem.c` to use `_mm256_set1_ps` (broadcast) instead of calculating per-element noise, resulting in an 8x-10x speedup.
+
+### 3.2. Mathematical Validity
+The assumption that a specific random seed produces a constant output is **false** for a standard Feistel network unless the network is degenerate.
+However, `gmem_aro.c` acts as a *definition* layer: it defines that *if* a specific seed is encountered, the system *shunts* the Feistel network and replaces it with a constant function. This is a valid "Override" or "Specialization".
+
+# Summary
+ARO is a meta-layer that swaps the mathematical model (Feistel vs Constant vs Linear) based on input parameters (Seed) to achieve performance gains.
