@@ -1,10 +1,12 @@
 # Generative Memory
 
-A dependency-free, portable C library for **Procedural Data Synthesis** and **Synthetic Addressing**. GVM projects a virtual 1-Petabyte data space using deterministic mathematical functions, requiring nearly zero disk space while providing bit-exact uniformity.
+An Experimental C library for customizable **Procedural Memory Spaces*. 
+
+Generative Memory projects a virtual 1-Petabyte data space using deterministic mathematical functions, requiring nearly zero disk space while providing bit-exact uniformity.
 
 ##  Key Features
-- **Large Scale**: Universal addressing from `0` to `2^64 - 1` ($2^{64}$ bytes).
-- **Procedural Origin**: Deterministic data generation using a 4-round Feistel Shuffle and Variety Reverse Number System (VRNS).
+- **Large Scale**: easy to navigate addressing from `0` to `2^64 - 1` ($2^{64}$ bytes).
+- **Procedural Origin**: Deterministic data generation using a 4-round Feistel Shuffle and Residue Number Systems (RNS).
 - **Materiality Layer**: High-performance sparse overlay with **AVX2 SIMD** acceleration.
 - **Persistence**: Append-Only File (AOF) logging for durable data modifications.
 - **Mesh Coherence**: Autonomous node discovery and real-time synchronization via UDP.
@@ -130,4 +132,4 @@ Dual licensed under either of:
 - Apache License, Version 2.0 ([LICENSE-APACHE](LICENSE-APACHE) or http://www.apache.org/licenses/LICENSE-2.0)
 - MIT license ([LICENSE-MIT](LICENSE-MIT) or http://opensource.org/licenses/MIT)
 
-at your option.
+
