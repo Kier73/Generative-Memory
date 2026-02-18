@@ -1,7 +1,7 @@
-# GVM: Generative Memory Core - Setup & Usage Guide
+# Generative Memory Setup & Usage Guide
 
 ## Overview
-GVM is an **Inductive Computational Substrate** that exposes up to **100TB of virtual memory** as a native OS drive. Unlike traditional storage, GVM synthesizes data on-demand using mathematical variety kernels, achieving multi-GB/s throughput without physical NAND overhead.
+Generative Memory is an *experimental system that exposes up to **100TB of virtual memory** as a native OS drive. Unlike traditional storage, Generative Memory synthesizes data on-demand using mathematical kernels, achieving multi-GB/s throughput without physical NAND overhead.
 
 ---
 
@@ -36,7 +36,7 @@ To build and run GVM, you need:
 
 ## 3. Mounting the Virtual Drive
 
-To expose the 100TB substrate as a drive (e.g., `G:`), run the following command from the project root:
+To expose the 100TB space as a drive (e.g., `G:`), run the following command from the project root:
 
 ```powershell
 # Add WinFsp to path if not already present
@@ -77,4 +77,4 @@ python benchmarks/vfs_vs_nvme.py
 
 ---
 > [!NOTE]
-> This is a developmental release. Future updates will include persistent serialization and advanced manifold filtering.
+> This is a developmental release. Future updates will include persistent serialization and advanced space filtering.
