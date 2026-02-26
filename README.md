@@ -12,8 +12,6 @@ Imagine a massive, sprawling city footprint.
 *   **Traditional RAM** tries to draw a map by painting every single inch of every single street in excruciating detail, taking up vast amounts of canvas (bytes).
 *   **Generative Memory** simply remembers the *Seed*—the foundational blueprint equations of the city. When you need to know what building is at coordinate `(X, Y)`, you don't look at a painted canvas; you ask the mathematical blueprint to rapidly tell you what is there.
 
-By doing this, the bottleneck of computing is no longer the **size** of your memory, but the **speed of your navigation** through a mathematical space.
-
 ### The Virtual Manifold
 The core of Generative Memory is the $2^{64}$ coordinate manifold. This is a virtual space containing roughly 18 Quintillion addresses (16 Exabytes of data space).
 
