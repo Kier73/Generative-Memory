@@ -1,0 +1,33 @@
+[package]
+name = "gmem_rs"
+version = "0.1.0"
+edition = "2021"
+authors = ["Kier73 <kier73research@gmail.com>"]
+description = "Generative Memory mathematical core: zero-allocation topological address spaces mapping."
+
+[lib]
+crate-type = ["rlib", "cdylib"]
+
+[dependencies]
+cudarc = { version = "0.19.3", features = ["cuda-version-from-build-system", "nvrtc"] }
+dashmap = "6.1.0"
+faer = "0.24.0"
+memmap2 = "0.9.10"
+nalgebra = "0.34.1"
+ndarray = "0.17.2"
+rustfft = "6.4.1"
+# We aim for `#![no_std]` compatibility for the inner math core where possible.
+
+[dev-dependencies]
+criterion = "0.5"
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "abort"
+# Note: RUSTFLAGS="-C target-cpu=native" should be used for max performance on host machine.
+
+[[bench]]
+name = "perf_vrns"
+harness = false

@@ -1,0 +1,40 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "gmem-python"
+version = "0.2.0"
+description = "Generative Memory for Python: A deterministic 2⁶⁴ virtual address space with O(1) fetch/write."
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Kieran Vanderburgh"}
+]
+keywords = ["memory", "generative", "pytorch", "hdc", "sparse", "procedural"]
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+]
+dependencies = []
+
+[project.optional-dependencies]
+analysis = [
+    "numpy",
+    "scipy",
+    "pandas",
+    "psutil"
+]
+torch = [
+    "torch"
+]
+
+[project.urls]
+"Homepage" = "https://github.com/Kier73/Generative-Memory-for-Python"
+"Bug Tracker" = "https://github.com/Kier73/Generative-Memory-for-Python/issues"
+
+[tool.setuptools.packages.find]
+include = ["gmem*"]
