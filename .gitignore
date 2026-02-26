@@ -150,7 +150,12 @@ cython_debug/
 # GMem specific
 *.aof
 *.snapshot
-gmem/__pycache__/
+*.gvm_delta
+*.gvm
+bindings-python/gmem/__pycache__/
+core-rust/target/
+benchmarks/*.exe
+bindings-c/*.exe
 
 # IDEs
 .vscode/

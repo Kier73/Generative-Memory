@@ -57,15 +57,24 @@ When writing persistent edits natively to the zero-copy appended Memory Log (AOF
 
 ---
 
-## Dare to Run It: 1-Click Reproducibility
+## 🚀 Dare to Run It: 1-Click Reproducibility
 
 Claims like "crashing PyTorch while bypassing physical VRAM" or "teleporting 65KB into 52 bytes" sound like mathematical fiction. **Don't take our word for it.**
 
 We have provided a Master Testing Harness that will compile the Rust C-FFI core directly on your machine and execute the benchmark limits against your own physical hardware.
 
+### Prerequisites
+To run the benchmarks and compile the mathematical core natively, your machine must have:
+1.  **Python 3.10+** (For the execution wrapper and PyTorch/Pandas boundaries).
+2.  **Rust Toolchain** (`cargo` and `rustc`) to compile the lock-free mathematical core.
+3.  *(Optional but Recommended)* **GCC / MinGW** if you wish to run the bare-metal C-language L3 Cache limit race.
+4.  *(Optional)* **CUDA / NVCC** if you wish to run the GPU Holographic Compiler over the PTX layers.
+
+### 1-Click Execution
+
 ```bash
-git clone https://github.com/Kier73/Generative-Memory-for-Python.git
-cd Generative-Memory-for-Python
+git clone https://github.com/Kier73/Generative-Memory.git
+cd Generative-Memory
 python run_all_benchmarks.py
 ```
 
@@ -83,9 +92,11 @@ For those interested in the engineering, Generative Memory is built on absolute 
 - **Lock-Free Concurrency:** Leveraging pure atomic C++ overlays, we ensure zero bottlenecks when millions of asynchronous operations hit the map at once.
 
 ## Getting Started
-It takes only one line to drop this capability natively into your codebase.
+It takes only one line to drop this capability natively into your codebase via the Python bindings. Run `cargo build --release` in the `core-rust` directory, then:
 
 ```python
+import sys
+sys.path.append("./bindings-python")
 from gmem.rs_bridge import FastGMemContext
 
 # Initializing 16 Exabytes of instantly accessible, zero-RAM Address space
@@ -100,12 +111,12 @@ ctx.write(address=999, value=3.14)
 
 ## Documentation
 
-Dive deeper into the engineering logic and benchmarks in our dedicated documentation library:
-- [Architecture & Testing](Docs/ARCHITECTURE_AND_TESTING.md)
-- [Usage Guide](gmem/USAGE_GUIDE.md)
-- [Grounding Theory](Docs/GROUNDING.md)
+Dive deeper into the mathematical logic inside the `docs/` library:
+- [Architecture & Testing](docs/ARCHITECTURE_AND_TESTING.md)
+- [Usage Guide & Decorators](docs/Dependencies%20and%20Decorators.md)
+- [Grounding Theory](docs/GROUNDING.md)
 
 ## Licensing
 This project is dual-licensed under MIT and Apache-2.0.
 
-Official Repository: [https://github.com/Kier73/Generative-Memory-for-Python](https://github.com/Kier73/Generative-Memory-for-Python)
+Official Repository: [https://github.com/Kier73/Generative-Memory](https://github.com/Kier73/Generative-Memory)

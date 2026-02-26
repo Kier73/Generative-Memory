@@ -17,7 +17,7 @@ your_project/
 
 # Option B: Add the parent directory to sys.path
 import sys
-sys.path.insert(0, r"C:\Users\kross\Downloads\PB")
+sys.path.insert(0, ".") # Replace "." with the path to the Generative-Memory folder
 
 # Then import normally
 from gmem import GMemContext
