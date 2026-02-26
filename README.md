@@ -22,23 +22,23 @@ Unlike an empty hard drive waiting to be filled, every single one of those 18 Qu
 Generative Memory is in an application state. tested across multiple domains  natively via the backend Rust Engine (`gmem_rs`):
 
 ### 1. Breaking the Speed Barrier (20+ Million Ops/Sec)
-Because we replace reading RAM with calculating equations, those equations need to be instantly fast. Written natively in Rust and executed directly over C-pointers, Generative Memory safely computes and returns memory coordinates at a blisteringly fast **20,746,888 times per second**—vastly outpacing standard Python or network Dictionary limits, with absolutely **zero multithreading race conditions**.
+Because this system replaces reading RAM with calculating equations, those equations need to be instantly fast. Written natively in Rust and executed directly over C-pointers, Generative Memory safely computes and returns memory coordinates at a blisteringly fast **20,746,888 times per second**—vastly outpacing standard Python or network Dictionary limits, with absolutely **zero multithreading race conditions**.
 
 ### 2. Deep Learning Parity (261x Memory Savings)
 When Neural Networks (like PyTorch LLMs) train on data, they typically require hundreds of gigabytes of expensive Graphics Card memory (VRAM). 
-By swapping out PyTorch linear layers for `GMemLinear` layers, we demonstrated that a model can successfully learn and converge its mathematical gradients while throwing away the physical matrix map. In our standard benchmarks, the VRAM cost was crushed from over 136,000 dense floats down to merely 522 parameters, achieving a **261.9x memory reduction** without a drop in accuracy.
+By swapping out PyTorch linear layers for `GMemLinear` layers, the system demonstrated that a model can learn and converge its mathematical gradients while throwing away the physical matrix map. In standard benchmarks, the VRAM cost was crushed from over 136,000 dense floats down to merely 522 parameters, achieving a **261.9x memory reduction** without a drop in accuracy.
 
-### 3. Universal Media Teleportation (1,260x Compression)
-We built a Universal Semantic Autoencoder that looks at physical data (like a 65 Kilobyte image) and finds a geometric way to "lock" its shape.
+### 3. Semantic Autoencoder (1,260x Compression)
+The Semantic Autoencoder that looks at physical data (like a 65 Kilobyte image) and finds a geometric way to "lock" its shape.
 Instead of sending 65,000 bytes over the internet, Generative Memory teleports the file by sending only **52 bytes** of pure spatial variables natively via a specialized CUDA GPU Compiler.
 
 ### 4. Flawless Entropy (Zero Collisions)
 You might wonder: *Will the generated math ever mistakenly repeat or overwrite itself?* 
-We extensively stress-tested the `fmix64` avalanche mapping algorithms. Over 2.5 million addresses randomly accessed across the topology space produced exactly 2.5 million perfectly unique floats. 
+to tackle this,  stress-tests occured for the `fmix64` avalanche mapping algorithms. Over 2.5 million addresses randomly accessed across the topology space produced exactly 2.5 million perfectly unique floats. 
 
-## Extreme Hardware Limits (MSI Cyborg 15 A12V Baseline)
+## Extreme Hardware Limits (the Humble MSI Cyborg 15 A12V Baseline)
 
-We shifted from testing standard software metrics to determining exactly where Generative Memory breaks physical 2026 hardware boundaries (Intel Core i7 L3 Cache, NVIDIA RTX 4060 8GB GDDR6, 512GB NVMe M.2).
+Shifting from testing standard software metrics to determining exactly where Generative Memory breaks physical 2026 hardware boundaries (Intel Core i7 L3 Cache, NVIDIA RTX 4060 8GB GDDR6, 512GB NVMe M.2).
 
 ### 1. The L3 Cache Ceiling
 When a classical system intentionally misses the L3 CPU Cache (by forcing random lookups across a single fragmented `1.0 Gigabyte` physical C array), the hardware physically grabs memory from raw DDR5 RAM chips. 
@@ -55,11 +55,9 @@ When writing persistent edits natively to the zero-copy appended Memory Log (AOF
 
 ---
 
-## 🚀 Dare to Run It: 1-Click Reproducibility
+## 1-Click Reproducibility
 
-Claims like "crashing PyTorch while bypassing physical VRAM" or "teleporting 65KB into 52 bytes" sound like mathematical fiction. **Don't take our word for it.**
-
-We have provided a Master Testing Harness that will compile the Rust C-FFI core directly on your machine and execute the benchmark limits against your own physical hardware.
+Master Testing Harness that will compile the Rust C-FFI core directly on your machine and execute the benchmark limits against your own physical hardware.
 
 ### Prerequisites
 To run the benchmarks and compile the mathematical core natively, your machine must have:
@@ -77,7 +75,7 @@ python run_all_benchmarks.py
 ```
 
 > **⚠️ A Note on the VRAM Exhaustion Test (`suite_7_vram_limit.py`):**  
-> By default, the testing harness runs the PyTorch bounds benchmark in **Safe Mode**. If you manually execute the VRAM suite natively, it will intentionally force your computer to allocate Gigabytes of raw tensors until it crashes your graphics card or system RAM. **This will cause your Operating System to heavily lock-up and freeze** as it violently thrashes the disk pagefile trying to survive the `OutOfMemory` condition. We strongly suggest sticking to `--safe` mode unless you are specifically stress-testing machine bounds.
+> By default, the testing harness runs the PyTorch bounds benchmark in **Safe Mode**. If you manually execute the VRAM suite natively, it will intentionally force your computer to allocate Gigabytes of raw tensors until it crashes your graphics card or system RAM. **This will cause your Operating System to heavily lock-up and freeze** as it violently thrashes the disk pagefile trying to survive the `OutOfMemory` condition. strongly suggest sticking to `--safe` mode unless you are specifically stress-testing machine bounds.
 
 ---
 
@@ -117,4 +115,4 @@ Dive deeper into the mathematical logic inside the `docs/` library:
 ## Licensing
 This project is dual-licensed under MIT and Apache-2.0.
 
-Official Repository: [https://github.com/Kier73/Generative-Memory](https://github.com/Kier73/Generative-Memory)
+Kieran Vanderburgh
