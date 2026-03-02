@@ -38,7 +38,7 @@ to tackle this,  stress-tests occured for the `fmix64` avalanche mapping algorit
 
 ## Extreme Hardware Limits (the Humble MSI Cyborg 15 A12V Baseline)
 
-Shifting from testing standard software metrics to determining exactly where Generative Memory breaks physical 2026 hardware boundaries (Intel Core i7 L3 Cache, NVIDIA RTX 4060 8GB GDDR6, 512GB NVMe M.2).
+Shifting from testing standard software metrics to determining exactly where Generative Memory compares to hardware boundaries (Intel Core i7 L3 Cache, NVIDIA RTX 4060 8GB GDDR6, 512GB NVMe M.2).
 
 ### 1. The L3 Cache Ceiling
 When a classical system intentionally misses the L3 CPU Cache (by forcing random lookups across a single fragmented `1.0 Gigabyte` physical C array), the hardware physically grabs memory from raw DDR5 RAM chips. 
