@@ -28,7 +28,7 @@ Instead of sending 65,000 bytes over the internet, Generative Memory teleports t
 You might wonder: *Will the generated math ever mistakenly repeat or overwrite itself?* 
 to tackle this,  stress-tests occured for the `fmix64` avalanche mapping algorithms. Over 2.5 million addresses randomly accessed across the topology space produced exactly 2.5 million perfectly unique floats. 
 
-## Extreme Hardware Limits (the Humble MSI Cyborg 15 A12V Baseline)
+## Hardware Comparison (the Humble MSI Cyborg 15 A12V Baseline)
 
 Shifting from testing standard software metrics to determining exactly where Generative Memory compares to hardware boundaries (Intel Core i7 L3 Cache, NVIDIA RTX 4060 8GB GDDR6, 512GB NVMe M.2).
 
