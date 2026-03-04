@@ -7,7 +7,7 @@ Generative Memory is an architecture that aims to optimize computer memory and d
 Instead of storing data across millions of silicon transistors, we translate data into procedural equations and navigation. The computer does not *store* the data; it organically *regrows* the data exactly when you ask for it procedurally.
 
 ### The Virtual Manifold
-The core of Generative Memory is the $2^{64}$ coordinate manifold. This is a virtual space containing roughly 18 Quintillion addresses (16 Exabytes of data space).
+The core of Generative Memory is the $2^{64}$ coordinate address space. This is a virtual space containing roughly 18 Quintillion addresses (16 Exabytes of data space).
 
 Unlike an empty hard drive waiting to be filled, every single one of those 18 Quintillion addresses *already contains data* the second you instantiate a Seed. You do not get `KeyError`s or `OutOfMemory` exceptions. The space is natively populated by a highly optimized, completely deterministic math engine across layers. 
 
@@ -16,7 +16,7 @@ Unlike an empty hard drive waiting to be filled, every single one of those 18 Qu
 Generative Memory is in an application state. tested across multiple domains  natively via the backend Rust Engine (`gmem_rs`):
 
 ### 1. Breaking the Speed Barrier (20+ Million Ops/Sec)
-Because this system replaces reading RAM with calculating equations, those equations need to be instantly fast. Written natively in Rust and executed directly over C-pointers, Generative Memory safely computes and returns memory coordinates at a blisteringly fast **20,746,888 times per second**—vastly outpacing standard Python or network Dictionary limits, with absolutely **zero multithreading race conditions**.
+Because this system replaces optimizes memory through equations, meaning those equations need to be. fast. Written natively in Rust and executed directly over C-pointers, Generative Memory safely computes and returns memory coordinates at a fair **20,746,888 times per second**—vastly outpacing standard Python or network Dictionary limits, with absolutely **zero multithreading race conditions**.
 
 ### 2. Deep Learning Parity (261x Memory Savings)
 When Neural Networks (like PyTorch LLMs) train on data, they typically require hundreds of gigabytes of expensive Graphics Card memory (VRAM). 
