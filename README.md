@@ -4,9 +4,7 @@
 
 Generative Memory is an architecture that aims to optimize computer memory and data storage 
 
-Instead of storing data across millions of silicon transistors, we translate data into procedural equations and navigation. The computer does not *store* the data; it organically *regrows* the data exactly when you ask for it procedurally.
-
-### The Virtual Manifold
+### The Virtual Layer
 The core of Generative Memory is the $2^{64}$ coordinate address space. This is a virtual space containing roughly 18 Quintillion addresses (16 Exabytes of data space).
 
 Unlike an empty hard drive waiting to be filled, every single one of those 18 Quintillion addresses *already contains data* the second you instantiate a Seed. You do not get `KeyError`s or `OutOfMemory` exceptions. The space is natively populated by a highly optimized, completely deterministic math engine across layers. 
