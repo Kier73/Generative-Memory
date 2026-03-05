@@ -1,7 +1,5 @@
 # Generative Memory for Python & Rust
 
-> *"To turn computation into the navigation of massive layered address spaces. Replacing scale by byte size, into measuring the speed and accuracy of navigation."*
-
 Generative Memory is an architecture that aims to optimize computer memory and data storage 
 
 ### The Virtual Layer
