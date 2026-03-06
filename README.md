@@ -1,4 +1,4 @@
-# Generative Memory for Python & Rust
+# Generative Memory 
 
 Generative Memory is an architecture that aims to optimize computer memory and data storage 
 
